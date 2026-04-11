@@ -1,0 +1,1 @@
+// This file is being replaced by ClinicInfo.tsx to match the new requirements.

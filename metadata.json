@@ -1,0 +1,9 @@
+
+{
+  "name": "DocFlow - Premium Doctor Dashboard",
+  "description": "A comprehensive medical dashboard for doctors to manage patient orders, records, and schedules with AI-powered insights.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
