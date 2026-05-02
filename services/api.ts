@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://paleturquoise-cassowary-158484.hostingersite.com/api/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
 
 const api: AxiosInstance = axios.create({
  baseURL: API_BASE_URL,
@@ -17,11 +17,13 @@ api.interceptors.request.use(
   if (token) {
    config.headers.Authorization = `Bearer ${token}`;
   }
+  // لو FormData، امسح الـ Content-Type عشان axios يحطه تلقائياً مع الـ boundary
+  if (config.data instanceof FormData) {
+   delete config.headers['Content-Type'];
+  }
   return config;
  },
- (error) => {
-  return Promise.reject(error);
- }
+ (error) => Promise.reject(error)
 );
 
 // Response interceptor for error handling
@@ -29,7 +31,6 @@ api.interceptors.response.use(
  (response) => response,
  (error: AxiosError) => {
   if (error.response?.status === 401) {
-   // Unauthorized - clear token and redirect to login
    localStorage.removeItem('auth_token');
    localStorage.removeItem('doctor');
    window.location.href = '/login';
@@ -49,17 +50,8 @@ export const authAPI = {
   return response.data;
  },
  register: async (name: string, email: string, password: string) => {
-  try {
-   const response = await api.post('register', {
-    name,
-    email,
-    password,
-    // role: 'doctor'
-   });
-   return response.data;
-  } catch (error) {
-   throw error;
-  }
+  const response = await api.post('/register', { name, email, password });
+  return response.data;
  },
  logout: async () => {
   await api.post('/logout');
@@ -73,12 +65,19 @@ export const authAPI = {
 };
 
 // Doctor API
+// Doctor API
 export const doctorAPI = {
  getProfile: async () => {
   const response = await api.get('/doctor');
   return response.data;
  },
  updateProfile: async (data: any) => {
+  // لو FormData نبعت POST + _method=PUT زي الـ clinics
+  if (data instanceof FormData) {
+   data.append('_method', 'PUT');
+   const response = await api.post('/doctor', data);
+   return response.data;
+  }
   const response = await api.put('/doctor', data);
   return response.data;
  },
@@ -100,6 +99,16 @@ export const clinicAPI = {
  },
  delete: async (id: string | number) => {
   const response = await api.delete(`/clinics/${id}`);
+  return response.data;
+ },
+ // FormData versions للـ upload
+ createFormData: async (formData: FormData) => {
+  const response = await api.post('/clinics', formData);
+  return response.data;
+ },
+ updateFormData: async (id: string | number, formData: FormData) => {
+  // Laravel مش بيدعم PUT مع FormData — بنبعت POST + _method=PUT
+  const response = await api.post(`/clinics/${id}`, formData);
   return response.data;
  },
 };

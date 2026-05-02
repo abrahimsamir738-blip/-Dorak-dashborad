@@ -104,25 +104,16 @@ const DashboardHome: React.FC<DashboardProps> = ({
        <div className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-blue-500"></span><span className="text-[10px] font-bold text-slate-400">الزيارات</span></div>
       </div>
      </div>
-     <div className="h-64 md:h-80 w-full">
-      <ResponsiveContainer width="100%" height="100%">
-       <AreaChart data={chartData}>
-        <defs>
-         <linearGradient id="colorVisits" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="5%" stopColor="#2563eb" stopOpacity={0.15} />
-          <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
-         </linearGradient>
-        </defs>
-        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-        <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8', fontWeight: 'bold' }} dy={10} />
-        <YAxis orientation="right" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8', fontWeight: 'bold' }} dx={10} />
-        <Tooltip
-         contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', fontSize: '12px', fontWeight: 'bold' }}
-         itemStyle={{ color: '#2563eb' }}
-        />
-        <Area type="monotone" dataKey="patients" stroke="#2563eb" strokeWidth={3} fillOpacity={1} fill="url(#colorVisits)" />
-       </AreaChart>
-      </ResponsiveContainer>
+     <div className="lg:col-span-2 bg-white p-6 md:p-10 rounded-[2.5rem] shadow-sm border border-slate-100 flex flex-col items-center justify-center min-h-[320px]">
+      <div className="flex flex-col items-center gap-4 opacity-40">
+       <svg className="w-16 h-16 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+       </svg>
+       <div className="text-center">
+        <p className="font-black text-slate-400 text-lg">تحليل الزيارات</p>
+        <p className="text-sm font-bold text-slate-300 mt-1">متاح في التحديث القادم ✨</p>
+       </div>
+      </div>
      </div>
     </div>
 

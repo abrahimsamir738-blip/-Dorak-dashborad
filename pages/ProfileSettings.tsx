@@ -1,30 +1,25 @@
-
 import React, { useState } from 'react';
 import { DoctorProfile } from '../types';
 import { doctorAPI } from '../services/api';
 import { useApp } from '../contexts/AppContext';
 import SearchableSelect from '../components/SearchableSelect';
 
-// Full list of medical specialties
 const MEDICAL_SPECIALTIES = [
  'مخ وأعصاب',
- 'رمد وجراحة عيون',
+ 'رمد',
  'قلب وأوعية دموية',
- 'باطنة العامة',
- 'أطفال وحديثي الولادة',
- 'جراحة عامة',
+ 'أطفال    ',
  'عظام',
- 'جلدية وتجميل',
+ 'جلدية  ',
  'نساء وتوليد',
  'أسنان',
  'أنف وأذن وحنجرة',
  'مسالك بولية',
- 'أمراض نفسية وعصبية',
  'علاج طبيعي وتأهيل',
- 'أورام',
- 'أشعة',
- 'تحاليل طبية',
- 'تخسيس وتغذية',
+ ' وتغذية',
+ 'باطنة',
+ 'غددوسكر',
+ 'جراحة عامة',
 ];
 
 interface ProfileSettingsProps {
@@ -37,23 +32,29 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ profile, setProfile, 
  const { showToast, showLoading, hideLoading } = useApp();
  const [formData, setFormData] = useState<DoctorProfile>(profile);
  const [isSaved, setIsSaved] = useState(false);
+ const [photoFile, setPhotoFile] = useState<File | null>(null); // ← جديد
 
  const handleSave = async (e: React.FormEvent) => {
   e.preventDefault();
   showLoading('جاري حفظ الملف الشخصي...');
   try {
-   await doctorAPI.updateProfile({
-    name: formData.name,
-    title: formData.title,
-    specialty: formData.specialty,
-    bio: formData.bio,
-    photo: formData.photo,
-   });
+   const payload = new FormData();
+   payload.append('name', formData.name);
+   payload.append('title', formData.title ?? '');
+   payload.append('specialty', formData.specialty ?? '');
+   payload.append('bio', formData.bio ?? '');
+
+   if (photoFile) {
+    payload.append('photo', photoFile);
+   }
+
+   await doctorAPI.updateProfile(payload);
 
    setProfile(formData);
    setIsSaved(true);
    showToast('تم حفظ الملف الشخصي بنجاح', 'success');
    setTimeout(() => setIsSaved(false), 3000);
+   setPhotoFile(null);
 
    if (onUpdate) onUpdate();
   } catch (error: any) {
@@ -65,9 +66,10 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ profile, setProfile, 
  };
 
  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  // In a real app, you'd upload to a server. Here we simulate with a placeholder.
   if (e.target.files && e.target.files[0]) {
-   const url = URL.createObjectURL(e.target.files[0]);
+   const file = e.target.files[0];
+   setPhotoFile(file); // ← احفظ الـ File الحقيقي
+   const url = URL.createObjectURL(file); // للـ preview بس
    setFormData({ ...formData, photo: url });
   }
  };
@@ -146,7 +148,9 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ profile, setProfile, 
       <div className="pt-4 flex justify-end gap-4 items-center">
        {isSaved && (
         <span className="text-emerald-600 text-sm font-bold flex items-center gap-2 animate-pulse">
-         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
+         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+         </svg>
          تم حفظ التغييرات
         </span>
        )}

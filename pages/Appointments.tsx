@@ -494,7 +494,7 @@ const Appointments: React.FC<AppointmentsProps> = ({ selectedClinicId, clinics, 
           onChange={e => setFormData({ ...formData, type: e.target.value as any })}
          >
           <option value="كشف">كشف جديد</option>
-          <option value="استشارة">استشارة / متابعة</option>
+          <option value="استشارة">كشف / استشارة</option>
          </select>
         </div>
        </div>
