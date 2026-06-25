@@ -349,7 +349,7 @@ const Appointments: React.FC<AppointmentsProps> = ({ selectedClinicId, clinics, 
         <div key={slot.id} className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm group hover:border-blue-200 transition-all">
          <div className="flex justify-between items-start mb-6">
           <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black border ${slot.type === 'كشف' ? 'bg-indigo-50 text-indigo-600 border-indigo-100' : 'bg-purple-50 text-purple-600 border-purple-100'}`}>
-           {slot.type === 'كشف' ? 'كشف جديد' : 'متابعة / استشارة'}
+           {slot.type === 'كشف' ? 'كشف جديد' : 'كشف / استشارة'}
           </span>
           <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
            <button onClick={() => openEditModal(slot)} className="w-8 h-8 flex items-center justify-center bg-slate-50 rounded-lg text-slate-400 hover:text-blue-600 border border-slate-100 transition-colors"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg></button>

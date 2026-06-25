@@ -194,6 +194,14 @@ const App: React.FC = () => {
     doctorProfile={doctorProfile}
     isOpen={isSidebarOpen}
     onClose={() => setIsSidebarOpen(false)}
+    onLogout={() => {
+     setIsAuthenticated(false);
+     setClinics([]);
+     setOrders([]);
+     setTimeSlots([]);
+     setDoctorProfile({ name: '', title: '', specialty: '', bio: '', photo: '' });
+     setActiveTab('dashboard');
+    }}
    />
 
    <main className="flex-1 lg:mr-64 w-full p-4 md:p-8 lg:p-12 transition-all duration-300">

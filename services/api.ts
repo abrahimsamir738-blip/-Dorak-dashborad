@@ -7,6 +7,7 @@ const api: AxiosInstance = axios.create({
  headers: {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
+  'ngrok-skip-browser-warning': 'true',
  },
 });
 
@@ -17,7 +18,6 @@ api.interceptors.request.use(
   if (token) {
    config.headers.Authorization = `Bearer ${token}`;
   }
-  // لو FormData، امسح الـ Content-Type عشان axios يحطه تلقائياً مع الـ boundary
   if (config.data instanceof FormData) {
    delete config.headers['Content-Type'];
   }
@@ -62,9 +62,26 @@ export const authAPI = {
   const response = await api.get('/me');
   return response.data;
  },
+ forgotPassword: async (email: string) => {
+  const response = await api.post('/forgot-password', { email });
+  return response.data;
+ },
+ resetPassword: async (
+  token: string,
+  email: string,
+  password: string,
+  password_confirmation: string
+ ) => {
+  const response = await api.post('/reset-password', {
+   token,
+   email,
+   password,
+   password_confirmation,
+  });
+  return response.data;
+ },
 };
 
-// Doctor API
 // Doctor API
 export const doctorAPI = {
  getProfile: async () => {
@@ -72,7 +89,6 @@ export const doctorAPI = {
   return response.data;
  },
  updateProfile: async (data: any) => {
-  // لو FormData نبعت POST + _method=PUT زي الـ clinics
   if (data instanceof FormData) {
    data.append('_method', 'PUT');
    const response = await api.post('/doctor', data);
@@ -101,13 +117,11 @@ export const clinicAPI = {
   const response = await api.delete(`/clinics/${id}`);
   return response.data;
  },
- // FormData versions للـ upload
  createFormData: async (formData: FormData) => {
   const response = await api.post('/clinics', formData);
   return response.data;
  },
  updateFormData: async (id: string | number, formData: FormData) => {
-  // Laravel مش بيدعم PUT مع FormData — بنبعت POST + _method=PUT
   const response = await api.post(`/clinics/${id}`, formData);
   return response.data;
  },

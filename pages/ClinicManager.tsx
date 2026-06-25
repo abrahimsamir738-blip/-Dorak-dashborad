@@ -31,7 +31,7 @@ const ClinicManager: React.FC<ClinicManagerProps> = ({ clinics, setClinics, onRe
    formData.append('address', editingClinic.address || '');
    formData.append('consultation_fee', String(consultationFee));
    formData.append('max_patients_per_day', String(maxPatientsPerDay));
-   formData.append('working_hours', editingClinic.workingHours || '');
+   formData.append('working_hours', editingClinic.workingHours || '9ص - 9م');
    formData.append('current_serving_number', String(editingClinic.currentServingNumber || 0));
    formData.append('is_closed_today', editingClinic.isClosedToday ? '1' : '0');
    if (editingClinic.mapLink) formData.append('map_link', editingClinic.mapLink);
@@ -103,7 +103,7 @@ const ClinicManager: React.FC<ClinicManagerProps> = ({ clinics, setClinics, onRe
   if (clinic) {
    setEditingClinic(clinic);
   } else {
-   setEditingClinic({ consultationFee: 300, maxPatientsPerDay: 20 });
+   setEditingClinic({ consultationFee: 300, maxPatientsPerDay: 20, workingHours: '9ص - 9م' });
   }
   setPhotoFile(null);
   setShowModal(true);
@@ -259,7 +259,7 @@ const ClinicManager: React.FC<ClinicManagerProps> = ({ clinics, setClinics, onRe
            onChange={e => handleNumericChange('consultationFee', e.target.value)}
           />
          </div>
-         <div>
+         <div className="hidden">
           <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">ساعات العمل</label>
           <input
            type="text"
